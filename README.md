@@ -35,11 +35,11 @@ Source:
 - Download the scripts (in this guide we train a 160M Pythia)
   ```bash
   cd /data/pythia-retrain  
-  git clone https://github.com/EleutherAI/gpt-neox.git
+  sudo git clone https://github.com/EleutherAI/gpt-neox.git
   cd gpt-neox
-  git config --global --add safe.directory /data/pythia-retrain/gpt-neox
+  sudo git config --global --add safe.directory /data/pythia-retrain/gpt-neox
 
-  mkdir ../input
+  sudo mkdir ../input
   cd ../input
   
   sudo wget https://raw.githubusercontent.com/EleutherAI/pythia/refs/heads/main/models/160M/pythia-160m.yml
@@ -59,10 +59,10 @@ Source:
 
 - Create the folder *checkpoints*
   ```bash
-  mkdir ../checkpoints/mydata-pythia160m
+  sudo mkdir ../checkpoints/mydata-pythia160m
   
 - Mofify the Pythia Config file (input/pythia-160m.yml)
-  ```json
+  ```yaml
   "train_micro_batch_size_per_gpu": XXX,    # make this a value that will fit within your GPU memory
   "gradient_accumulation_steps": YYY,       # make this a value to compensate to make the total batch size: XXX * YYY = 1024
 
@@ -81,7 +81,7 @@ Source:
   "load": "../checkpoints/mydata-pythia160m",
   "checkpoint_validation_with_forward_pass": False,
 
-- Modify L432 in *megatron/models/transformers.py*
+- Modify L432 in *megatron/models/transformers.py* to patch a bug
     ```python
     qkv = torch.cat([query_layer, key_layer, value_layer], dim=1)
 
@@ -93,7 +93,7 @@ Source:
 
 - Run the training:
   ```bash
-  python deepy.py train.py ../input/pythia-160m.yml  2>&1 | tee output.txt
+  sudo python deepy.py train.py ../input/pythia-160m.yml  2>&1 | tee output.txt
 
 ## 4. Convert the Checkpoints to HuggingFace format
 
