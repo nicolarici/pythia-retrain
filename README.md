@@ -107,9 +107,13 @@ Source:
 
   ) -> List[torch.Tensor]:
 
+- Go to HuggingFace and generate a new [API tokens](https://huggingface.co/settings/tokens) and then autheticate on the CLI:
+  ```bash
+  sudo git config --global credential.helper store
+  pip install --upgrade huggingface-hub
+  sudo huggingface-cli login
 
-- Download the convertion_checkpoints.sh from this repository in the /gpt-neox directory:
+- Download the convertion_checkpoints.py from this repository in the /gpt-neox directory:
 - Execute the script:
   ```bash
-  sudo chmod +x convert_checkpoints.sh
-  sudo ./convert_checkpoints.sh ../checkpoints/mydata-pythia160m ../output/mydata-pythia160m pythia-160m.yml 160M
+  sudo python convert_checkpoints.py -d ../checkpoints/mydata-pythia160m -o ../output/mydata-pythia160m -n pythia-160m.yml -p 160m -r mydata-pythia-160
