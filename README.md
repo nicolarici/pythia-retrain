@@ -4,6 +4,7 @@ A simple guide to train the Pythia suite with custom data (on the DGX)
 Source: 
  - [EleutherAI/pythia: Reproducing Training](https://github.com/EleutherAI/pythia/tree/main?tab=readme-ov-file#reproducing-training)
  - [EleutherAI/gpt-neox: Using Custom Data](https://github.com/EleutherAI/gpt-neox/tree/v1.0?tab=readme-ov-file#using-custom-data)
+ - [EleutherAI/lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness?tab=readme-ov-file#install)
 
 
 ## 1. Setup the GPT-NeoX Environment
@@ -117,3 +118,27 @@ Source:
 - Execute the script:
   ```bash
   sudo python convert_checkpoints.py -d ../checkpoints/mydata-pythia160m -o ../output/mydata-pythia160m -n pythia-160m.yml -p 160m -r mydata-pythia-160
+
+## 5. Evaluate checkppints
+
+- Create a new container with the *Image* set to **huggingface/transformers-pytorch-gpu:latest** and with a GPU (other options like *Volumes* as usual)
+- Install *vim* and the package [*lm-evaluation-harness*](https://github.com/EleutherAI/lm-evaluation-harness) as:
+  ```bash
+  apt-get update
+  apt-get install vim
+    
+  git clone https://github.com/EleutherAI/lm-evaluation-harness
+  cd lm-evaluation-harness
+  pip install -e .
+
+- Fix a bug for the WSC task adding the following line at the bottom of the file: *lm-evaluation-harness/lm_eval/tasks/wsc273/default.yaml*:
+  ```yaml
+  dataset_kwargs:
+   trust_remote_code: true
+
+- Download from this repository the script *checkpoints_evaluation.py* and modify the **STEPS** and the **TASKS** constant if needed
+- Execute the script:
+  ```bash
+  python3 checkpoints_evaluation.py -m me-huggingface/mydata-pythia160m -o /evaluation/mydata-pythia160m
+
+- Visualize the results with the *visualize_evaluation.ipynb* notebook adjusting the **PATH** and the **TASK** constant
