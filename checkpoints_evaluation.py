@@ -27,6 +27,10 @@ TASKS = ["lambada_openai", "piqa", "winogrande", "wsc273", "arc_easy", "arc_chal
 for s in STEPS:
     print(f"Running evaluation for step{s}...")
 
+    if os.path.exists(os.path.join(output_dir, f"step{s}.json")):
+        print(f"step{s}.json already exists in output directory. Skipping...")
+        continue
+
     # Build the command string
     command = (
         f"lm_eval --model hf "
