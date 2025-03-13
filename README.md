@@ -38,6 +38,7 @@ Source:
   cd /data/pythia-retrain  
   sudo git clone https://github.com/EleutherAI/gpt-neox.git
   cd gpt-neox
+  git checkout v1.0
   sudo git config --global --add safe.directory /data/pythia-retrain/gpt-neox
 
   sudo mkdir ../input
